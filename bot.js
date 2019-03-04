@@ -2076,10 +2076,7 @@ function play(guild, song) {
       .setColor("#8325c0")
       .setThumbnail(message.author.avatarURL)
       .setDescription(`
-**__
     اوامـــر البرودكاست
-__**
-
 **
 ⤠ *bc1 ⥨ رسالة جماعية لجميع الاعضاء
 ⤠ *bc2 ⥨ رسالة جماعية للاونلاين فقط
