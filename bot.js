@@ -2065,7 +2065,6 @@ function play(guild, song) {
  
   
   
-});
 
 
 
