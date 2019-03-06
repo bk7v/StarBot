@@ -2709,58 +2709,6 @@ client.on("message", message => {
 
 
 
-var go9993 = [0] // عدد التصويتات
-var wait = new Set() // 
-var onn = 'off' // المتغير onn الي قيمته off
-client.on("message", message => { // ذا لك عشان تفهمه
-   date = moment.duration(new Date() - message.author.createdAt).format("d");
-
-	if (message.content === '*vote') { // الامر
-   
-	 if (onn === 'off') return message.reply('التصويت مغلق حاليا') // اذا كان المتغير onn = 'off' مايسوي الامر ويقوله مايمدي
-	 if(date < 6) return message.reply('لن يتم احتساب تصويتك `عضو وهمي`') // ماراح يتم احتساب تصويت العضو لانه اقل من 6 ايام
-	  if (wait.has(message.author.id)) { // اذا الشخص موجود ب المتغير wait يكنسل العملية ويقول الي تحت
-    return message.reply("**لايمكنك استخدام الامر مرة اخرى**").then(message => { // ؟؟؟؟
-     message.delete(10000)  // يمسح الرسالة بعد 10 ثواني
-    })
-    }
-    wait.add(message.author.id); // يضيف ايدي الاشخاص الي كتبو الامر الى المتغير wait
-	 
-		let room = message.guild.channels.find("name",'التصويتات')  // اسم الروم يمديك تغيره
-		if (!room) return
-		go9993++ // اضافة الرقم 1 للجدول
-		message.reply('شكرا على تصويتك')
-	room.send(`عدد التصويتات الان = `${go9993}` `) // يرسل عدد التصويتات بالروم المحدد
-		
-
-
-	}});
-	client.on("message", message => {
-		if (!devs12.includes(message.author.id)) return; 
-		if (message.content.startsWith('*clearvotes')) { // الامر
-			go9993 = [0] // تصفير ال votes
-			message.reply(`**Thats Done, Votes Now =  `${go9993}` **`)
-			wait = new Set() // تصفير الاعضاء المصوتين عشان يمديهم يصوتون مرة ثانية اذا ماتبيهم يصوتون مرة ثانية احذف ذا السطر
-		}});
-	client.on("message", message => {	
-	if (message.content.startsWith('*startvotes')) { // الامر
-	if (onn == 'on') return message.reply('التصويت مفتوح من قبل') // اذا كان التصويت مفتوح يقوله مفتوح من قبل
-	if (!devs12.includes(message.author.id)) return message.reply('لايمكنك فعل ذلك') 
-		onn = 'on' // يخلي المتغير onn = 'on'
-		message.reply('Thats Done,') // يرد على الشخص بمنشن يقوله تم
-		}});
-	client.on("message", message => {
-	if (message.content.startsWith('*stopvotes')) { // الامر
-	if (!devs12.includes(message.author.id)) return message.reply('لايمكنك فعل ذلك')
-		if (onn == 'off') return message.reply('التصويت مغلوق من قبل') // اذا كان التصويت مغلق يقوله هو مغلق من قبل
-		message.reply('Thats Done,') //يقوله تم
-		onn = 'off' // يخلي المتغير onn = 'off'
-		}});
-	client.on("message", message => {	
-	if (message.content.startsWith('*votes')) { // الامر
-		console.log(go9993) // يكتب عدد التصويتات بالكونسل
-		message.channel.send('عدد التصويتات : ' + go9993) // يكتب عدد التصويتات بالشات 
-	}});
 
 
 
