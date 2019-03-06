@@ -2713,8 +2713,6 @@ var go9993 = [0] // عدد التصويتات
 var wait = new Set() // 
 var onn = 'off' // المتغير onn الي قيمته off
 client.on("message", message => { // ذا لك عشان تفهمه
-  let moment2 = require('moment-duration-format'), // بكج
- let  moment = require("moment"), // بكج
    date = moment.duration(new Date() - message.author.createdAt).format("d");
 
 	if (message.content === '*vote') { // الامر
