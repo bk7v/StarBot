@@ -36,7 +36,7 @@ const YouTube = require('simple-youtube-api');
 const yt_api_key = "AIzaSyDeoIH0u1e72AtfpwSKKOSy3IPp2UHzqi4"; 
 const youtube = new YouTube("AIzaSyAdORXg7UZUo7sePv97JyoDqtQVi3Ll0b8");
 const gif = require("gif-search");
-const client = new Discord.Client({disableEveryone: true});
+//const client = new Discord.Client({disableEveryone: true});
 
 
 client.on('ready', () => {
