@@ -166,6 +166,9 @@ ${prefix}invite ⥨ لدعوة البوت الى سيرفرك
 ${prefix}support ⥨ لدخول سيرفر الدعم
 **
 	
+**صانع البوت**
+***__♕bk7-v#5107__***
+
 `)
  
    message.channel.sendEmbed(embed)
@@ -205,6 +208,8 @@ ${prefix}support ⥨ لدخول سيرفر الدعم
 ⤠ *credit ⥨ لمعرفة رصيدك
 ⤠ *daily ⥨ لاخذ جائزة كل يوم مرة
 
+**صانع البوت**
+***__♕bk7-v#5107__***
 `)
 
 
@@ -1248,7 +1253,7 @@ warnc.send(e);
 
 client.on('message', msg => {
   if (msg.content === '*help-p') {
-    msg.reply(':envelope: | تم ارسال الاوامر العامة في الخاص');
+    msg.reply('**:envelope: | تم ارسال الاوامر العامة في الخاص**');
   }
 });
    
@@ -1256,13 +1261,13 @@ client.on('message', msg => {
 
 client.on('message', msg => {
   if (msg.content === '*help-a') {
-    msg.reply(':envelope: | تم ارسال اوامر الادمنية في الخاص');
+    msg.reply('**:envelope: | تم ارسال اوامر الادمنية في الخاص**');
   }
 });
 
 client.on('message', msg => {
   if (msg.content === '*help-g') {
-    msg.reply(':envelope: | تم ارسال اوامر الالعاب في الخاص');
+    msg.reply('**:envelope: | تم ارسال اوامر الالعاب في الخاص**');
   }
 });
 
@@ -1270,12 +1275,23 @@ client.on('message', msg => {
 
 client.on('message', msg => {
   if (msg.content === '*help-m') {
-    msg.reply(':envelope: | تم ارسال اوامر الموسيقى في الخاص');
+    msg.reply('**:envelope: | تم ارسال اوامر الموسيقى في الخاص**');
   }
 });
 
-	  
-	  
+client.on('message', msg => {
+  if (msg.content === '*help-bc') {
+    msg.reply('**:envelope: | تم ارسال اوامر الموسيقى في الخاص**');
+  }
+});
+
+
+
+	
+//**صانع البوت**
+//***__♕bk7-v#5107__***
+
+
 client.on('message' , message => {
 var prefix = "*"
 
