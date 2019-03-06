@@ -21,7 +21,6 @@ const figlet = require('figlet');
 const google = require('google-it'); 
 const zalgo = require('zalgolize');   
 const sql = require("sqlite");
-const dateFormat = require('dateformat'); 
 const pretty = require('pretty-ms') 
 const ytdl = require("ytdl-core");
 
