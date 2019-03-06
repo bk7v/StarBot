@@ -1636,7 +1636,7 @@ client.on('message',  (message) => {
 });
 
 
-bot.on('message', msg => {
+client.on('message', msg => {
 let prefix = "$"
 if(msg.content.startWith(prefix + hug)) {   
 
