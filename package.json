@@ -19,6 +19,7 @@
     "fs": "0.0.1-security",
     "fs-extra": "^6.0.1",
     "get-youtube-id": "^1.0.0",
+    "hh-mm-ss": "1.2.0",
     "giphy-api": "^1.2.7",
     "goo.gl": "^0.1.4",
     "google-it": "^1.1.3",
