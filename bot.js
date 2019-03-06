@@ -1636,50 +1636,7 @@ client.on('message',  (message) => {
 });
 
 
-client.on('message', msg => {
-let prefix = "$"
-if(msg.content.startWith(prefix + hug)) {   
 
-    let user = msg.mentions.users.first();
-if(!user) {
-
-    return msg.reply(`useage : ${prefix}hug <@user>`)
-
-}
-
-let hugs = [
-'https://media.giphy.com/media/42YlR8u9gV5Cw/giphy.gif',
-'https://media.giphy.com/media/6uEE79cXjssla/giphy.gif',
-'https://media.giphy.com/media/NhjPhBQIIxdxm/giphy.gif',
-'https://media.giphy.com/media/3oEhmDMA4r9GxhwEqA/giphy.gif',
-'https://media.giphy.com/media/QbkL9WuorOlgI/giphy.gif',
-'https://media.giphy.com/media/gnXG2hODaCOru/giphy.gif',
-'https://media.giphy.com/media/VGACXbkf0AeGs/giphy.gif',
-'https://media.giphy.com/media/7eQ8Ky3dAsRYA/giphy.gif',
-'https://media.giphy.com/media/xT1XGPy39lDKJ5Gc5W/giphy.gif',
-'https://media.giphy.com/media/13YrHUvPzUUmkM/giphy.gif'
-
-];
-     if(user.id === '518007825746755587') return msg.channel.send(' you can\'t :}');
-    if(user.id === msg.author.id) return msg.channel.send('Do not hug yourself :>');
-msg.channel.send({
-    embed: {
-     description: `${msg.author.username} huging ${user.username}`,
-  image: {
-    url: hugs[Math.floor(Math.random() * hugs.length)]
-  }
-
-}
-
-
-}).catch(e => {
-
-    bot.log.error();
-    (e)
-}
-    
-    )
-  }});
 
 
 
