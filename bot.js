@@ -198,6 +198,7 @@ ${prefix}support ⥨ لدخول سيرفر الدعم
 	  
 الاوامــر الــعـــامـــة
 
+**
 ⤠ *server ⥨ معلومات عن السيرفر                      
 ⤠ *say ⥨ البوت يردد كلامك         
 ⤠ *setcolor ⥨ عشان تغير لونك ملاحظة لازم تحط رقم اللون                                          
@@ -217,6 +218,8 @@ ${prefix}support ⥨ لدخول سيرفر الدعم
 ⤠ *allbots ⥨ يعرض لك كل البوتات
 ⤠ *credit ⥨ لمعرفة رصيدك
 ⤠ *daily ⥨ لاخذ جائزة كل يوم مرة
+⤠ *report ⥨ للبلاغ علي شخص
+**
 
 **صانع البوت**
 ***__♕bk7-v#5107__***
@@ -707,6 +710,7 @@ const embed = new Discord.RichEmbed()
 ⤠ *stopvote ⥨ توقيف التصويت
 ⤠ *votes  ⥨ تشوف التصويتات 
 ⤠ *setwelcomer  ⥨ الترحيب 
+⤠ *setreport  ⥨ وضع روم للبلاغات 
 **
 
 **__ويشتغل معكwelcomeوفي الترحيب بدون صورة بس سم الروم__**
@@ -719,6 +723,70 @@ message.author.sendEmbed(embed)
 
 }
 }); 
+
+
+
+const reportjson = JSON.parse(fs.readFileSync('./report.json' , 'utf8'));
+ 
+client.on('message', message => {
+           if (!message.channel.guild) return;
+ 
+    let room = message.content.split(" ").slice(1);
+    let findroom = message.guild.channels.find('name', `${room}`)
+    if(message.content.startsWith(prefix + "setreport")) {
+        if(!message.channel.guild) return message.reply('**This Command Only For Servers**');
+        if(!message.member.hasPermission('MANAGE_GUILD')) return message.channel.send('**اسف لاكن انت لا تملك رتبة** `MANAGE_GUILD`' );
+if(!room) return message.channel.send('اكتب اسم الروم')
+if(!findroom) return message.channel.send('لم اجد هاذا الروم')
+let embed = new Discord.RichEmbed()
+.setTitle('**Done The report Code Has Been Setup**')
+.addField('Channel:', `${room}`)
+.addField('Requested By:', `${message.author}`)
+.setThumbnail(message.author.avatarURL)
+.setFooter(`${client.user.username}`)
+message.channel.sendEmbed(embed)
+reportjson[message.guild.id] = {
+channel: room,
+}
+fs.writeFile("./report.json", JSON.stringify(reportjson), (err) => {
+if (err) console.error(err)
+})
+client.on('message', message => {
+ 
+    if(message.content.startsWith(`${prefix}report`)) {
+        let  user  =  message.mentions.users.first();
+      if(!message.channel.guild) return message.reply('**This Command Only For Servers**');
+    let reason = message.content.split(" ").slice(2).join(" ");
+      if(!user)  return  message.channel.send("**منشن الشخص الذي تريد تشتكي علية**")
+      if(!reason) return message.reply(`**Please provide a reason**`)
+    let findchannel = (message.guild.channels.find('name', `${reportjson[message.guild.id].channel}`))
+    if(!findchannel) return message.reply(`Error 404: The report Channel Cant Find Or Not Set To Set The report Channel Type: ${prefix}setReport`)
+    message.channel.send(`Done Thank You For Your Report Will Be Seen By The Staffs`)
+    let sugembed = new Discord.RichEmbed()
+    .setTitle('New Report !')
+    .addField('Report By:', `${message.author}`)
+    .addField('Reported User:', `${user}`)
+    .addField('Report Reason:', `${reason}`)
+    .setFooter(client.user.username)
+    findchannel.sendEmbed(sugembed)
+        .then(function (message) {
+          message.react('✅')
+          message.react('❌')
+        })
+        .catch(err => {
+            message.reply(`Error 404: The report Channel Cant Find Or Not Set To Set The report Channel Type: ${prefix}setReport`)
+            console.error(err);
+        });
+        }
+      }
+)}
+})
+
+
+
+
+
+
 
 const sWlc = {}
 client.on('message', message => {
@@ -2735,93 +2803,9 @@ client.on("message", message => {
 
 
 
-client.on('message', async message => {
-    if (!message.guild) return;
-    if (!account[message.author.id]) {
-        account[message.author.id] = {
-            reg: false,
-            name: 'nothing'
-        };
-    }
-    if (message.content === `${prefix}register`) {
-        if (account[message.author.id].reg === true) return message.channel.send('❌ | لديك حساب مٌسجل بالفعل...');
-        if (message.author.bot) return;
-        const args = message.content.split(' ').slice(prefix.length);
-        if (!args[0]) return message.channel.send('❌ | أدخل إسم للتسجيل به.');
-        if (args[0]) {
-            account[message.author.id].reg = true;
-            account[message.author.id].name = args;
-            await saveChanges();
-            message.channel.send('تم تسجيل الحساب !!');
-        }
-    } else if (message.content === `${prefix}ping`) {
-        if (account[message.author.id].reg === false) return message.channel.send('❌ | يجب أن تكون مٌسجل لإستخدام هذا الأمر');
-        message.channel.send('PONG');
-    }
-});
-
-function saveChanges() {
-    return fs.writeFile('./account.json', JSON.stringify(account), error => {
-        if (error) console.log(error);
-    });
-}
 
 
-const reportjson = JSON.parse(fs.readFileSync('./report.json' , 'utf8'));
- 
-client.on('message', message => {
-           if (!message.channel.guild) return;
- 
-    let room = message.content.split(" ").slice(1);
-    let findroom = message.guild.channels.find('name', `${room}`)
-    if(message.content.startsWith(prefix + "setReport")) {
-        if(!message.channel.guild) return message.reply('**This Command Only For Servers**');
-        if(!message.member.hasPermission('MANAGE_GUILD')) return message.channel.send('**اسف لاكن انت لا تملك رتبة** `MANAGE_GUILD`' );
-if(!room) return message.channel.send('اكتب اسم الروم')
-if(!findroom) return message.channel.send('لم اجد هاذا الروم')
-let embed = new Discord.RichEmbed()
-.setTitle('**Done The report Code Has Been Setup**')
-.addField('Channel:', `${room}`)
-.addField('Requested By:', `${message.author}`)
-.setThumbnail(message.author.avatarURL)
-.setFooter(`${client.user.username}`)
-message.channel.sendEmbed(embed)
-reportjson[message.guild.id] = {
-channel: room,
-}
-fs.writeFile("./report.json", JSON.stringify(reportjson), (err) => {
-if (err) console.error(err)
-})
-client.on('message', message => {
- 
-    if(message.content.startsWith(`${prefix}report`)) {
-        let  user  =  message.mentions.users.first();
-      if(!message.channel.guild) return message.reply('**This Command Only For Servers**');
-    let reason = message.content.split(" ").slice(2).join(" ");
-      if(!user)  return  message.channel.send("**منشن الشخص الذي تريد تشتكي علية**")
-      if(!reason) return message.reply(`**Please provide a reason**`)
-    let findchannel = (message.guild.channels.find('name', `${reportjson[message.guild.id].channel}`))
-    if(!findchannel) return message.reply(`Error 404: The report Channel Cant Find Or Not Set To Set The report Channel Type: ${prefix}setReport`)
-    message.channel.send(`Done Thank You For Your Report Will Be Seen By The Staffs`)
-    let sugembed = new Discord.RichEmbed()
-    .setTitle('New Report !')
-    .addField('Report By:', `${message.author}`)
-    .addField('Reported User:', `${user}`)
-    .addField('Report Reason:', `${reason}`)
-    .setFooter(client.user.username)
-    findchannel.sendEmbed(sugembed)
-        .then(function (message) {
-          message.react('✅')
-          message.react('❌')
-        })
-        .catch(err => {
-            message.reply(`Error 404: The report Channel Cant Find Or Not Set To Set The report Channel Type: ${prefix}setReport`)
-            console.error(err);
-        });
-        }
-      }
-)}
-})
+
 
 
 
