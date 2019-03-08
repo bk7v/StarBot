@@ -39,11 +39,22 @@ const gif = require("gif-search");
 //const client = new Discord.Client({disableEveryone: true});
 
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
- client.user.setGame("*help | By: bk7-v", "https://www.twitch.tv/Alpha");
+//client.on('ready', () => {
+//  console.log(`Logged in as ${client.user.tag}!`);
+//// client.user.setGame("*help | By: bk7-v", "https://www.twitch.tv/Alpha");
+//});
+
+const gamestats = [`*help`,`♕bk7-v#5107`,`Servers: ${client.guilds.size} `,`Version: 1.0.0`]
+var index = 0
+var timer = 60 
+client.on("ready", ()=> {
+        setInterval(function(){
+        client.user.setGame(`${gamestats[index]}`,'https://www.twitch.tv/ToxicCodes') 
+        index++
+            if( index >= gamestats.length) index = 0 ;
+        }, timer*1000);
+
 });
- 
 client.on('message', function(message) {
 	const myID = "446243110025166858";
     let args = message.content.split(" ").slice(1).join(" ");
@@ -2547,6 +2558,7 @@ function play(guild, song, message) {
       .setDescription(`
     اوامـــر البرودكاست
 **
+⤠ *bc ⥨ رسالة بكل الانواع
 ⤠ *bc1 ⥨ رسالة جماعية لجميع الاعضاء
 ⤠ *bc2 ⥨ رسالة جماعية للاونلاين فقط
 ⤠ *bc3 ⥨ رسالة جماعية للوفلاين فقط
@@ -2649,6 +2661,59 @@ client.on('message' , message => {//bcrole
     }
 });
 
+const seender = 'لعمل منشن لمرسل الرساله قم بكتابة [المرسل] في الرسالة.';
+const server = 'لكتابة اسم السيرفر قم بكتابة [السيرفر] في الرسالة.';
+const user = 'لعمل منشن للشخص قم بكتابة [العضو] في الرسالة.';
+ 
+client.on('message', message => {
+   if(!message.channel.guild) return;
+    var success = new Discord.RichEmbed()
+    .setDescription(`تم أرسال رسالتك بنجاح.`)
+    .setColor('GREEN')
+if(message.content.startsWith(prefix + 'bc')) {
+if(!message.channel.guild) return message.channel.send('**هذا الأمر فقط للسيرفرات**').then(m => m.delete(5000));
+if(!message.member.hasPermission('ADMINISTRATOR')) return      message.channel.send('**للأسف لا تمتلك صلاحية** `ADMINISTRATOR`' );
+let args = message.content.split(" ").join(" ").slice(2 + prefix.length);
+let BcList = new Discord.RichEmbed()
+.setColor('RANDOM')
+.setDescription(`**▶ 📝 لأرسال رسالة امبد قم بالضغط على \n ▶ ✏ لأرسال رسالة عادية قم بالضغط على \n ★ ${user} \n ★ ${server} \n ★ ${seender}**`)
+if (!args) return message.reply('**يجب عليك كتابة كلمة او جملة لإرسال البرودكاست**');message.channel.send(BcList).then(msg => {
+msg.react('📝')
+.then(() => msg.react('✏'))
+.then(() =>msg.react('📝'))
+ 
+let EmbedBcFilter = (reaction, user) => reaction.emoji.name === '📝' && user.id === message.author.id;
+let NormalBcFilter = (reaction, user) => reaction.emoji.name === '✏' && user.id === message.author.id;
+ 
+let EmbedBc = msg.createReactionCollector(EmbedBcFilter, { time: 60000 });
+let NormalBc = msg.createReactionCollector(NormalBcFilter, { time: 60000 });
+ 
+ 
+EmbedBc.on("collect", r => {
+ 
+message.channel.send(success);
+message.guild.members.forEach(m => {
+let EmbedRep = args.replace('[السيرفر]' ,message.guild.name).replace('[العضو]', m).replace('[المرسل]', `${message.author}`)
+var bc = new
+Discord.RichEmbed()
+.setColor('RANDOM')
+.setDescription(EmbedRep)
+.setFooter(`${prefix}invite | لدعوة برودكاست بوت`)
+m.send({ embed: bc })
+msg.delete();
+})
+})
+NormalBc.on("collect", r => {
+  message.channel.send(success);
+message.guild.members.forEach(m => {
+let NormalRep = args.replace('[السيرفر]' ,message.guild.name).replace('[العضو]', m).replace('[المرسل]', `${message.author}`)
+m.send(NormalRep);
+msg.delete();
+})
+})
+})
+}
+});
 
 
 
@@ -2700,6 +2765,63 @@ function saveChanges() {
         if (error) console.log(error);
     });
 }
+
+
+const reportjson = JSON.parse(fs.readFileSync('./report.json' , 'utf8'));
+ 
+client.on('message', message => {
+           if (!message.channel.guild) return;
+ 
+    let room = message.content.split(" ").slice(1);
+    let findroom = message.guild.channels.find('name', `${room}`)
+    if(message.content.startsWith(prefix + "setReport")) {
+        if(!message.channel.guild) return message.reply('**This Command Only For Servers**');
+        if(!message.member.hasPermission('MANAGE_GUILD')) return message.channel.send('**اسف لاكن انت لا تملك رتبة** `MANAGE_GUILD`' );
+if(!room) return message.channel.send('اكتب اسم الروم')
+if(!findroom) return message.channel.send('لم اجد هاذا الروم')
+let embed = new Discord.RichEmbed()
+.setTitle('**Done The report Code Has Been Setup**')
+.addField('Channel:', `${room}`)
+.addField('Requested By:', `${message.author}`)
+.setThumbnail(message.author.avatarURL)
+.setFooter(`${client.user.username}`)
+message.channel.sendEmbed(embed)
+reportjson[message.guild.id] = {
+channel: room,
+}
+fs.writeFile("./report.json", JSON.stringify(reportjson), (err) => {
+if (err) console.error(err)
+})
+client.on('message', message => {
+ 
+    if(message.content.startsWith(`${prefix}report`)) {
+        let  user  =  message.mentions.users.first();
+      if(!message.channel.guild) return message.reply('**This Command Only For Servers**');
+    let reason = message.content.split(" ").slice(2).join(" ");
+      if(!user)  return  message.channel.send("**منشن الشخص الذي تريد تشتكي علية**")
+      if(!reason) return message.reply(`**Please provide a reason**`)
+    let findchannel = (message.guild.channels.find('name', `${reportjson[message.guild.id].channel}`))
+    if(!findchannel) return message.reply(`Error 404: The report Channel Cant Find Or Not Set To Set The report Channel Type: ${prefix}setReport`)
+    message.channel.send(`Done Thank You For Your Report Will Be Seen By The Staffs`)
+    let sugembed = new Discord.RichEmbed()
+    .setTitle('New Report !')
+    .addField('Report By:', `${message.author}`)
+    .addField('Reported User:', `${user}`)
+    .addField('Report Reason:', `${reason}`)
+    .setFooter(client.user.username)
+    findchannel.sendEmbed(sugembed)
+        .then(function (message) {
+          message.react('✅')
+          message.react('❌')
+        })
+        .catch(err => {
+            message.reply(`Error 404: The report Channel Cant Find Or Not Set To Set The report Channel Type: ${prefix}setReport`)
+            console.error(err);
+        });
+        }
+      }
+)}
+})
 
 
 
